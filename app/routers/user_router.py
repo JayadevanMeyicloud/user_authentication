@@ -16,9 +16,13 @@ router = APIRouter(
 )
 
 @router.get("/")
-def get_users(current_user: dict = Depends(require_admin)):
+def get_users(
+    page: int = 1,
+    limit: int = 10,
+    current_user: dict = Depends(require_admin)
+    ):
 
-    result = fetch_all_users()
+    result = fetch_all_users(page,limit)
 
     return success_response(
         message="Users fetched successfully",
@@ -55,7 +59,13 @@ def patch_user(
     user: UserUpdateDTO,
     current_user: dict = Depends(require_admin)
 ):
-    result = update_user_partial_repo(user_id, user)
+    result = update_user_partial_repo(
+        user_id, 
+        user.username,
+        user.email,
+        user.password,
+        user.role
+)
 
     return success_response(
         message="User partially updated successfully",

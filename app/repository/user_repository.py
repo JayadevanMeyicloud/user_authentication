@@ -21,18 +21,16 @@ def get_user_by_email(email: str):
 
     return user
 
-def get_all_users():
+def get_all_users(limit,offset):
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute(
-        """
-        SELECT id,
-               username,
-               email,
-               role
-        FROM public.users
-        """
-    )
+    cur.execute("""
+        SELECT id, username, email, role
+        FROM users
+        ORDER BY id
+        LIMIT %s OFFSET %s
+    """, (limit, offset))
+
     users = cur.fetchall()
     cur.close()
     conn.close()
@@ -114,13 +112,14 @@ def update_user_partial_repo(user_id, username, email, password, role):
 
     conn = get_connection()
     cur = conn.cursor()
+
     cur.execute("""
         UPDATE users
         SET
-            username = %s,
-            email = %s,
-            password = %s,
-            role = %s
+            username = COALESCE(%s, username),
+            email = COALESCE(%s, email),
+            password = COALESCE(%s, password),
+            role = COALESCE(%s, role)
         WHERE id = %s
         RETURNING id, username, email, role
     """, (username, email, password, role, user_id))
