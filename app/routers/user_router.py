@@ -1,0 +1,76 @@
+from fastapi import APIRouter, Depends
+from app.services.user_services import (
+    fetch_all_users,
+    fetch_user_by_id,
+    update_user_full,
+    update_user_partial_repo,
+    delete_user
+)
+from app.utils.response import success_response
+from app.utils.dependencies import require_admin
+from app.schemas.user_schema import UserUpdateDTO
+
+router = APIRouter(
+    prefix="/users",
+    tags=["Users"]
+)
+
+@router.get("/")
+def get_users(current_user: dict = Depends(require_admin)):
+
+    result = fetch_all_users()
+
+    return success_response(
+        message="Users fetched successfully",
+        data=result
+    )
+
+@router.get("/{user_id}")
+def get_user(user_id: int, current_user: dict = Depends(require_admin)):
+
+    result = fetch_user_by_id(user_id)
+
+    return success_response(
+        message="User fetched successfully",
+        data=result
+    )
+
+@router.put("/{user_id}")
+def update_user(
+    user_id: int,
+    user: UserUpdateDTO,
+    current_user: dict = Depends(require_admin)
+):
+    result = update_user_full(user_id, user)
+
+    return success_response(
+        message="User updated successfully",
+        data=result
+    )
+
+# PATCH (PARTIAL UPDATE)
+@router.patch("/{user_id}")
+def patch_user(
+    user_id: int,
+    user: UserUpdateDTO,
+    current_user: dict = Depends(require_admin)
+):
+    result = update_user_partial_repo(user_id, user)
+
+    return success_response(
+        message="User partially updated successfully",
+        data=result
+    )
+
+# DELETE
+@router.delete("/{user_id}")
+def delete_user_route(
+    user_id: int,
+    current_user: dict = Depends(require_admin)
+):
+    result = delete_user(user_id)
+
+    return success_response(
+        message="User deleted successfully",
+        data=result
+    )

@@ -1,0 +1,13 @@
+
+# USER ROLES
+
+ROLE_ADMIN = "admin"
+ROLE_EMPLOYEE = "employee"
+
+# AUTH TOKENS
+
+TOKEN_TYPE = "bearer"
+
+# DEFAULTS
+
+DEFAULT_ROLE = ROLE_EMPLOYEE
