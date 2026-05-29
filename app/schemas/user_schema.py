@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional,List
 
 class UserRegisterRequestDTO(BaseModel):
     username:str
@@ -10,6 +10,7 @@ class UserRegisterRequestDTO(BaseModel):
 class UserLoginRequestDTO(BaseModel):
     email:EmailStr
     password:str
+
 
 class UserUpdateDTO(BaseModel):
     username: Optional[str] = None
@@ -26,3 +27,15 @@ class UserResponseDTO(BaseModel):
     username:str
     email:EmailStr
     role:str
+
+class LoginResponseDTO(BaseModel):
+    message: str
+    data: TokenResponseDTO
+
+class UserListResponseDTO(BaseModel):
+    message: str
+    data: List[UserResponseDTO]
+
+class UserDataResponseDTO(BaseModel):
+    message: str
+    data: UserResponseDTO

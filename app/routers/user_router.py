@@ -8,14 +8,18 @@ from app.services.user_services import (
 )
 from app.utils.response import success_response
 from app.utils.dependencies import require_admin
-from app.schemas.user_schema import UserUpdateDTO
+from app.schemas.user_schema import (
+    UserUpdateDTO,
+    UserDataResponseDTO,
+    UserListResponseDTO
+)
 
 router = APIRouter(
     prefix="/users",
     tags=["Users"]
 )
 
-@router.get("/")
+@router.get("/", response_model=UserListResponseDTO)
 def get_users(
     page: int = 1,
     limit: int = 10,
@@ -29,7 +33,7 @@ def get_users(
         data=result
     )
 
-@router.get("/{user_id}")
+@router.get("/{user_id}", response_model=UserDataResponseDTO)
 def get_user(user_id: int, current_user: dict = Depends(require_admin)):
 
     result = fetch_user_by_id(user_id)
@@ -39,7 +43,7 @@ def get_user(user_id: int, current_user: dict = Depends(require_admin)):
         data=result
     )
 
-@router.put("/{user_id}")
+@router.put("/{user_id}", response_model=UserDataResponseDTO)
 def update_user(
     user_id: int,
     user: UserUpdateDTO,
@@ -53,7 +57,7 @@ def update_user(
     )
 
 # PATCH (PARTIAL UPDATE)
-@router.patch("/{user_id}")
+@router.patch("/{user_id}", response_model=UserDataResponseDTO)
 def patch_user(
     user_id: int,
     user: UserUpdateDTO,
@@ -73,7 +77,7 @@ def patch_user(
     )
 
 # DELETE
-@router.delete("/{user_id}")
+@router.delete("/{user_id}", response_model=UserDataResponseDTO)
 def delete_user_route(
     user_id: int,
     current_user: dict = Depends(require_admin)

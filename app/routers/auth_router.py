@@ -1,7 +1,10 @@
 from fastapi import APIRouter
 from app.schemas.user_schema import (
     UserRegisterRequestDTO,
-    UserLoginRequestDTO
+    UserLoginRequestDTO,
+    UserDataResponseDTO,
+    LoginResponseDTO
+
 )
 from app.services.user_services import (
     register_user,
@@ -14,7 +17,8 @@ router = APIRouter(
     tags=["Authentication"]
 )
 
-@router.post("/register")
+@router.post("/register", response_model=UserDataResponseDTO)
+
 def register(
     user: UserRegisterRequestDTO
 ):
@@ -26,7 +30,8 @@ def register(
         data=result
     )
 
-@router.post("/login")
+@router.post("/login", response_model=LoginResponseDTO)
+
 def login(
     user: UserLoginRequestDTO
 ):
