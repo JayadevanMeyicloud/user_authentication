@@ -11,7 +11,8 @@ from app.utils.dependencies import require_admin
 from app.schemas.user_schema import (
     UserUpdateDTO,
     UserDataResponseDTO,
-    UserListResponseDTO
+    UserListResponseDTO,
+    DeleteUserResponseDTO,
 )
 
 router = APIRouter(
@@ -77,7 +78,7 @@ def patch_user(
     )
 
 # DELETE
-@router.delete("/{user_id}", response_model=UserDataResponseDTO)
+@router.delete("/{user_id}", response_model=DeleteUserResponseDTO)
 def delete_user_route(
     user_id: int,
     current_user: dict = Depends(require_admin)

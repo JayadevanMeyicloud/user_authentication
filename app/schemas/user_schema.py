@@ -39,3 +39,13 @@ class UserListResponseDTO(BaseModel):
 class UserDataResponseDTO(BaseModel):
     message: str
     data: UserResponseDTO
+
+class DeleteUserDataDTO(BaseModel):
+    message: str
+    user_id: int
+
+
+class DeleteUserResponseDTO(BaseModel):
+    success: bool
+    message: str
+    data: DeleteUserDataDTO
